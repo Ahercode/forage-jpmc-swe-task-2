@@ -48,6 +48,7 @@ class Graph extends Component<IProps, {}> {
       // Load the `table` in the `<perspective-viewer>` DOM reference.
 
       // Add more Perspective configurations here.
+
       elem.load(this.table);
     }
   }
@@ -57,7 +58,15 @@ class Graph extends Component<IProps, {}> {
     if (this.table) {
       // As part of the task, you need to fix the way we update the data props to
       // avoid inserting duplicated entries into Perspective table again.
-      this.table.update(this.props.data.map((el: any) => {
+
+      const uniqueData = this.props.data.filter((
+          el, index, self) =>
+        index === self.findIndex((t) => (
+          t.timestamp === el.timestamp && t.stock === el.stock
+        ))
+      );
+        // Update the table with the new data
+      this.table.update(uniqueData.map((el: any) => {
         // Format the data from ServerRespond to the schema
         return {
           stock: el.stock,
